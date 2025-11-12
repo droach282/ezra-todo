@@ -1,0 +1,49 @@
+@Api_HostAddress = http://localhost:5186
+@todoId = 1
+
+### Get all todos
+GET {{Api_HostAddress}}/todos
+Accept: application/json
+
+### Get incomplete todos only
+GET {{Api_HostAddress}}/todos/incomplete
+Accept: application/json
+
+### Get a specific todo by ID
+GET {{Api_HostAddress}}/todos/{{todoId}}
+Accept: application/json
+
+### Create a new todo
+POST {{Api_HostAddress}}/todos
+Content-Type: application/json
+
+{
+  "description": "Buy groceries"
+}
+
+### Create another todo
+POST {{Api_HostAddress}}/todos
+Content-Type: application/json
+
+{
+  "description": "Finish the project documentation"
+}
+
+### Update todo description
+PUT {{Api_HostAddress}}/todos/{{todoId}}/description
+Content-Type: application/json
+
+{
+  "description": "Buy groceries and cook dinner"
+}
+
+### Mark todo as complete
+PUT {{Api_HostAddress}}/todos/{{todoId}}/complete
+
+### Mark todo as incomplete
+PUT {{Api_HostAddress}}/todos/{{todoId}}/uncomplete
+
+### Delete a todo
+DELETE {{Api_HostAddress}}/todos/{{todoId}}
+
+###
