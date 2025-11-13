@@ -6,8 +6,6 @@ public interface ITodoService
     Task<Models.Todo> GetTodoAsync(int id);
     Task<List<Models.Todo>> GetAllTodosAsync();
     Task<List<Models.Todo>> GetIncompleteTodosAsync();
-    Task UpdateTodoDescriptionAsync(int id, string description);
-    Task CompleteTodoAsync(int id);
-    Task UncompleteTodoAsync(int id);
+    Task<Models.Todo> UpdateTodoAsync(int id, string? description, bool? isCompleted);
     Task DeleteTodoAsync(int id);
 }

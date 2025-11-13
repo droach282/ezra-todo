@@ -1,5 +1,5 @@
 @Api_HostAddress = http://localhost:5186
-@todoId = 1
+@todoId = 2
 
 ### Get all todos
 GET {{Api_HostAddress}}/todos
@@ -30,7 +30,7 @@ Content-Type: application/json
 }
 
 ### Update todo description
-PUT {{Api_HostAddress}}/todos/{{todoId}}/description
+PATCH {{Api_HostAddress}}/todos/{{todoId}}
 Content-Type: application/json
 
 {
@@ -38,10 +38,29 @@ Content-Type: application/json
 }
 
 ### Mark todo as complete
-PUT {{Api_HostAddress}}/todos/{{todoId}}/complete
+PATCH {{Api_HostAddress}}/todos/{{todoId}}
+Content-Type: application/json
+
+{
+  "isCompleted": true
+}
 
 ### Mark todo as incomplete
-PUT {{Api_HostAddress}}/todos/{{todoId}}/uncomplete
+PATCH {{Api_HostAddress}}/todos/{{todoId}}
+Content-Type: application/json
+
+{
+  "isCompleted": false
+}
+
+### Update description and mark as complete
+PATCH {{Api_HostAddress}}/todos/{{todoId}}
+Content-Type: application/json
+
+{
+  "description": "Solve world hunger",
+  "isCompleted": true
+}
 
 ### Delete a todo
 DELETE {{Api_HostAddress}}/todos/{{todoId}}

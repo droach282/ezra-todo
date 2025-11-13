@@ -25,20 +25,12 @@ public class Todo
 
     public void Complete(DateTime lastModified)
     {
-        if (IsCompleted)
-        {
-            throw new InvalidOperationException("Cannot complete a completed todo.");
-        }
         LastModified = lastModified;
         IsCompleted = true;
     }
-    
+
     public void ResetCompletion(DateTime lastModified)
     {
-        if (!IsCompleted)
-        {
-            throw new InvalidOperationException("Cannot reset completion on an incomplete todo.");
-        }
         LastModified = lastModified;
         IsCompleted = false;
     }

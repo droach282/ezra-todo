@@ -10,6 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddOpenApi();
 
+// Add CORS support
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+});
+
 // Add validation support for DataAnnotations
 builder.Services.AddValidation();
 
@@ -50,6 +62,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Enable CORS
+app.UseCors("AllowFrontend");
 
 // Map endpoints
 app.MapTodoEndpoints();

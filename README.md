@@ -27,12 +27,12 @@ Todo.Backend/
 ## Features
 
 - Create, read, update, and delete todos
-- Mark todos as complete/incomplete
-- Update todo descriptions
+- Partial updates with PATCH (update description and/or completion status)
 - Filter incomplete todos
 - Input validation with detailed error messages
 - Automatic database migrations
 - OpenAPI/Swagger documentation (in development mode)
+- CORS support for frontend integration
 
 ## API Endpoints
 
@@ -44,10 +44,21 @@ All endpoints are prefixed with `/todos`:
 | GET | `/todos/incomplete` | Get incomplete todos only |
 | GET | `/todos/{id}` | Get a specific todo by ID |
 | POST | `/todos` | Create a new todo |
-| PUT | `/todos/{id}/description` | Update todo description |
-| PUT | `/todos/{id}/complete` | Mark todo as complete |
-| PUT | `/todos/{id}/uncomplete` | Mark todo as incomplete |
+| PATCH | `/todos/{id}` | Update todo (description and/or completion status) |
 | DELETE | `/todos/{id}` | Delete a todo |
+
+### PATCH Request Body
+
+The PATCH endpoint accepts partial updates with optional fields:
+
+```json
+{
+  "description": "Updated description",  // optional
+  "isCompleted": true                    // optional
+}
+```
+
+You can update just the description, just the completion status, or both in a single request.
 
 ## Getting Started
 
@@ -117,9 +128,9 @@ dotnet test
 
 ### Tradeoffs
 
-The validation for completing (or "uncompleting") a todo when it's already in that state is artificial - normally, I'd probably choose to ignore something like that rather than returning an error.  However, introducing these business rules gave me a chance to allowed me to demonstrate the strengths of DDD - the model itself knows what operations are valid based on its current state.  That idea appeals to me.
+The API uses a single PATCH endpoint for updates, supporting partial updates for both description and completion status. This provides flexibility while maintaining RESTful principles. The domain model uses imperative methods (`Complete()`, `ResetCompletion()`, `UpdateDescription()`) which maintain encapsulation and control over state transitions, while the service layer translates the PATCH request into appropriate domain operations.
 
-The downside of the previous point is that it causes friction with traditional REST API endpoints.  In order to support a normal `PUT` endpoint while still leveraging the benefit of DDD, the service layer would need to know how to translate the data received in a PUT into an action that could be taken on the model (instead of just updating the model and saving it).  I've side-stepped that here by making RPC-ish `/complete` and `/uncomplete` PUT endpoints that take no data (other than the Todo ID).  This doesn't really fit the traditional REST-ful API model of manipulating resources instead of taking actions, but it allows the client to have discrete control over what they're actually changing on any given todo and limits validation to just that operation.
+This approach allows the domain model to maintain its business logic and validation (e.g., description length constraints) while providing a clean, flexible API for clients. The tradeoff is that the service layer needs to coordinate between the API's data-oriented approach and the domain's behavior-oriented design.
 
 ## Database
 

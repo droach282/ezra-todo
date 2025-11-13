@@ -23,14 +23,8 @@ public static class TodoEndpoints
         group.MapPost("/", CreateTodo)
             .WithName("CreateTodo");
 
-        group.MapPut("/{id:int}/description", UpdateTodoDescription)
-            .WithName("UpdateTodoDescription");
-
-        group.MapPut("/{id:int}/complete", CompleteTodo)
-            .WithName("CompleteTodo");
-
-        group.MapPut("/{id:int}/uncomplete", UncompleteTodo)
-            .WithName("UncompleteTodo");
+        group.MapPatch("/{id:int}", UpdateTodo)
+            .WithName("UpdateTodo");
 
         group.MapDelete("/{id:int}", DeleteTodo)
             .WithName("DeleteTodo");
@@ -66,31 +60,12 @@ public static class TodoEndpoints
         return TypedResults.Created($"/todos/{todo.Id}", todo);
     }
 
-    private static async Task<Ok<Models.Todo>> UpdateTodoDescription(
+    private static async Task<Ok<Models.Todo>> UpdateTodo(
         int id,
-        UpdateDescriptionRequest request,
+        UpdateTodoRequest request,
         ITodoService todoService)
     {
-        await todoService.UpdateTodoDescriptionAsync(id, request.Description);
-        var todo = await todoService.GetTodoAsync(id);
-        return TypedResults.Ok(todo);
-    }
-
-    private static async Task<Ok<Models.Todo>> CompleteTodo(
-        int id,
-        ITodoService todoService)
-    {
-        await todoService.CompleteTodoAsync(id);
-        var todo = await todoService.GetTodoAsync(id);
-        return TypedResults.Ok(todo);
-    }
-
-    private static async Task<Ok<Models.Todo>> UncompleteTodo(
-        int id,
-        ITodoService todoService)
-    {
-        await todoService.UncompleteTodoAsync(id);
-        var todo = await todoService.GetTodoAsync(id);
+        var todo = await todoService.UpdateTodoAsync(id, request.Description, request.IsCompleted);
         return TypedResults.Ok(todo);
     }
 
@@ -109,7 +84,7 @@ public record CreateTodoRequest(
     [StringLength(80, MinimumLength = 1, ErrorMessage = "Description must be between 1 and 80 characters.")]
     string Description);
 
-public record UpdateDescriptionRequest(
-    [Required(ErrorMessage = "Description is required.")]
+public record UpdateTodoRequest(
     [StringLength(80, MinimumLength = 1, ErrorMessage = "Description must be between 1 and 80 characters.")]
-    string Description);
+    string? Description,
+    bool? IsCompleted);

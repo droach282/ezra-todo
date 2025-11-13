@@ -41,25 +41,30 @@ public class TodoService(ITodoRepository repository) : ITodoService
         return await repository.GetIncompleteAsync();
     }
 
-    public async Task UpdateTodoDescriptionAsync(int id, string description)
+    public async Task<Models.Todo> UpdateTodoAsync(int id, string? description, bool? isCompleted)
     {
         var todo = await repository.GetAsync(id);
-        todo.UpdateDescription(description, DateTime.UtcNow);
-        await repository.UpdateAsync(todo);
-    }
+        var now = DateTime.UtcNow;
 
-    public async Task CompleteTodoAsync(int id)
-    {
-        var todo = await repository.GetAsync(id);
-        todo.Complete(DateTime.UtcNow);
-        await repository.UpdateAsync(todo);
-    }
+        if (description is not null)
+        {
+            todo.UpdateDescription(description, now);
+        }
 
-    public async Task UncompleteTodoAsync(int id)
-    {
-        var todo = await repository.GetAsync(id);
-        todo.ResetCompletion(DateTime.UtcNow);
+        if (isCompleted is not null)
+        {
+            if (isCompleted.Value)
+            {
+                todo.Complete(now);
+            }
+            else
+            {
+                todo.ResetCompletion(now);
+            }
+        }
+
         await repository.UpdateAsync(todo);
+        return todo;
     }
 
     public async Task DeleteTodoAsync(int id)
