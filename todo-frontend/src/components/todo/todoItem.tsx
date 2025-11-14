@@ -1,23 +1,27 @@
-﻿import { useEffect, useState } from 'react'
-import DeleteTodoModal from './deleteTodoModal'
+﻿import DeleteTodoModal from './deleteTodoModal'
 import TodoItemEditMode from './todoItemEditMode'
 import TodoItemViewMode from './todoItemViewMode'
 import type { Todo } from '@/models/todo.ts'
 import { useDeleteTodo, useUpdateTodo } from '@/hooks/useTodoMutations'
+import { useEditMode } from '@/hooks/useEditMode'
 
 export default function TodoItem({ todo }: { todo: Todo }) {
-  const [editMode, setEditMode] = useState(false)
-  const [deleteMode, setDeleteMode] = useState(false)
-  const [description, setDescription] = useState<string>(todo.description)
-
-  useEffect(() => {
-    setDescription(todo.description)
-  }, [todo.description])
+  const {
+    editMode,
+    deleteMode,
+    description,
+    setDescription,
+    enterEditMode,
+    exitEditMode,
+    enterDeleteMode,
+    exitDeleteMode,
+    cancelEdit,
+  } = useEditMode(todo.description)
 
   const { mutation: todoMutation, error: updateError } = useUpdateTodo(todo.id)
   const { mutation: deleteMutation, error: deleteError } = useDeleteTodo(
     todo.id,
-    () => setDeleteMode(false),
+    exitDeleteMode,
   )
 
   const error = updateError || deleteError
@@ -31,15 +35,10 @@ export default function TodoItem({ todo }: { todo: Todo }) {
       { description: description },
       {
         onSuccess: () => {
-          setEditMode(false)
+          exitEditMode()
         },
       },
     )
-  }
-
-  function cancelEdit() {
-    setDescription(todo.description)
-    setEditMode(false)
   }
 
   function handleDelete() {
@@ -72,8 +71,8 @@ export default function TodoItem({ todo }: { todo: Todo }) {
             <TodoItemViewMode
               description={description}
               isLoading={isLoading}
-              onEdit={() => setEditMode(true)}
-              onDelete={() => setDeleteMode(true)}
+              onEdit={enterEditMode}
+              onDelete={enterDeleteMode}
             />
           )}
         </div>
@@ -84,7 +83,7 @@ export default function TodoItem({ todo }: { todo: Todo }) {
         isOpen={deleteMode}
         todoDescription={todo.description}
         onDelete={handleDelete}
-        onCancel={() => setDeleteMode(false)}
+        onCancel={exitDeleteMode}
       />
     </>
   )

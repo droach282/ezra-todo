@@ -1,16 +1,16 @@
-﻿import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+﻿import { useQuery } from '@tanstack/react-query'
 import TodoItem from './todoItem'
 import AddTodo from './addTodo'
 import { getTodos } from '@/services/todoApi.ts'
+import { useTodoFilter } from '@/hooks/useTodoFilter'
 
 export default function TodoList() {
-  const [showIncompleteOnly, setShowIncompleteOnly] = useState(false)
-
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['todos'],
     queryFn: getTodos,
   })
+
+  const { showIncompleteOnly, filteredTodos, toggleFilter } = useTodoFilter(data)
 
   if (isPending) {
     return <span>Loading...</span>
@@ -21,16 +21,12 @@ export default function TodoList() {
     return <span>Sorry, an error occurred.</span>
   }
 
-  const filteredData = showIncompleteOnly
-    ? data.filter((todo) => !todo.isCompleted)
-    : data
-
   return (
     <div className="max-w-fit flex flex-col gap-4">
       <div className="flex items-center justify-end gap-4">
         <AddTodo className="flex-1" />
         <button
-          onClick={() => setShowIncompleteOnly(!showIncompleteOnly)}
+          onClick={toggleFilter}
           className={`px-4 py-2 rounded border-2 transition-colors ${
             showIncompleteOnly
               ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
@@ -40,8 +36,8 @@ export default function TodoList() {
           {showIncompleteOnly ? 'Show All' : 'Show Incomplete'}
         </button>
       </div>
-      {filteredData.length > 0 ? (
-        filteredData.map((item) => (
+      {filteredTodos.length > 0 ? (
+        filteredTodos.map((item) => (
             <TodoItem key={item.id} todo={item} />
           ))
       ): (
