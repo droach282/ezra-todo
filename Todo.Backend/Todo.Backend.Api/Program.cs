@@ -17,8 +17,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:3000", "http://localhost:4173")
               .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials();
+              .AllowAnyHeader();
     });
 });
 
@@ -61,10 +60,10 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-
 // Enable CORS
 app.UseCors("AllowFrontend");
+
+app.UseHttpsRedirection();
 
 // Map endpoints
 app.MapTodoEndpoints();

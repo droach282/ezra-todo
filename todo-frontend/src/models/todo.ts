@@ -2,6 +2,6 @@
   id: number
   description: string
   isCompleted: boolean
-  createdOn: Date
-  lastModified: Date
+  createdOn: string
+  lastModified: string
 }

@@ -80,7 +80,7 @@ The application will be available at `http://localhost:3000`
 
 **Developer Experience:**
 - Type-safe API integration with TypeScript and Zod
-- Comprehensive unit testing (75 total tests)
+- Comprehensive unit testing (79 total tests)
 - OpenAPI/Swagger documentation (development mode)
 - CORS support for frontend integration
 - Hot module replacement in development
@@ -292,7 +292,7 @@ dotnet test
 
 **Framework**: Vitest with React Testing Library
 
-**Coverage**: 67 tests across components and hooks
+**Coverage**: 71 tests across components and hooks
 
 **Location**: Co-located with source files in `todo-frontend/src/`
 
@@ -305,10 +305,10 @@ dotnet test
 
 #### Test Coverage
 
-**Components** (54 tests):
+**Components** (58 tests):
 - `addTodo.test.tsx` (14 tests) - Form submission, validation, error handling, loading states
-- `todoItem.test.tsx` (22 tests) - Rendering, editing, deletion, completion toggling, loading states
-- `todoList.test.tsx` (18 tests) - Data loading, filtering, error states, empty list handling
+- `todoItem.test.tsx` (24 tests) - Rendering, editing, deletion, completion toggling, loading states
+- `todoList.test.tsx` (20 tests) - Data loading, filtering, error states, empty list handling
 
 **Hooks** (13 tests):
 - `useTodoMutations.test.tsx` (13 tests) - Create, update, and delete mutations with error handling

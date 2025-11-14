@@ -15,7 +15,6 @@ export default function DeleteTodoModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-10">
-      Add
       <div className="bg-white p-6 rounded-lg shadow-xl z-20">
         <h3 className="text-lg font-semibold mb-4">Delete Todo</h3>
         <p className="mb-6">
