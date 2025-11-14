@@ -36,11 +36,6 @@ public class TodoService(ITodoRepository repository) : ITodoService
         return await repository.GetAllAsync();
     }
 
-    public async Task<List<Models.Todo>> GetIncompleteTodosAsync()
-    {
-        return await repository.GetIncompleteAsync();
-    }
-
     public async Task<Models.Todo> UpdateTodoAsync(int id, string? description, bool? isCompleted)
     {
         var todo = await repository.GetAsync(id);

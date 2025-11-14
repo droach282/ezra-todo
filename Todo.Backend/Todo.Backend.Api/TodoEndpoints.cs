@@ -14,9 +14,6 @@ public static class TodoEndpoints
         group.MapGet("/", GetAllTodos)
             .WithName("GetAllTodos");
 
-        group.MapGet("/incomplete", GetIncompleteTodos)
-            .WithName("GetIncompleteTodos");
-
         group.MapGet("/{id:int}", GetTodoById)
             .WithName("GetTodoById");
 
@@ -35,12 +32,6 @@ public static class TodoEndpoints
     private static async Task<Ok<List<Models.Todo>>> GetAllTodos(ITodoService todoService)
     {
         var todos = await todoService.GetAllTodosAsync();
-        return TypedResults.Ok(todos);
-    }
-
-    private static async Task<Ok<List<Models.Todo>>> GetIncompleteTodos(ITodoService todoService)
-    {
-        var todos = await todoService.GetIncompleteTodosAsync();
         return TypedResults.Ok(todos);
     }
 

@@ -7,5 +7,4 @@ public interface ITodoRepository
     Task UpdateAsync(Models.Todo todo);
     Task DeleteAsync(int id);
     Task<List<Models.Todo>> GetAllAsync();
-    Task<List<Models.Todo>> GetIncompleteAsync();
 }

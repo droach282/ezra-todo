@@ -18,14 +18,18 @@ public class TodoTests
     }
 
     [Fact]
-    public void Todo_Complete_WhenAlreadyCompleted_ShouldThrowInvalidOperationException()
+    public void Todo_Complete_WhenAlreadyCompleted_ShouldBeIdempotent()
     {
         var subject = Todo.CreateInstance(
             "The thing",
             true,
             _nowish,
             _nowish);
-        Assert.Throws<InvalidOperationException>(() => subject.Complete(_nowish));
+
+        // Should not throw - Complete is idempotent
+        subject.Complete(_nowish.AddDays(1));
+        Assert.True(subject.IsCompleted);
+        Assert.Equal(_nowish.AddDays(1), subject.LastModified);
     }
 
     [Fact]
@@ -43,15 +47,18 @@ public class TodoTests
     }
 
     [Fact]
-    public void Todo_ResetCompletion_WhenAlreadyIncomplete_ShouldThrowInvalidOperationException()
+    public void Todo_ResetCompletion_WhenAlreadyIncomplete_ShouldBeIdempotent()
     {
         var subject = Todo.CreateInstance(
             "The thing",
             false,
             _nowish.AddDays(-1),
             _nowish.AddDays(-1));
-        
-        Assert.Throws<InvalidOperationException>(() => subject.ResetCompletion(_nowish));
+
+        // Should not throw - ResetCompletion is idempotent
+        subject.ResetCompletion(_nowish);
+        Assert.False(subject.IsCompleted);
+        Assert.Equal(_nowish, subject.LastModified);
     }
 
     [Fact]

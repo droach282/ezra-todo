@@ -70,14 +70,6 @@ public class TodoRepository(TodoContext context) : ITodoRepository
         return entities.Select(MapToModel).ToList();
     }
 
-    public async Task<List<Todo.Backend.Models.Todo>> GetIncompleteAsync()
-    {
-        var entities = await context.Todos
-            .Where(t => !t.IsCompleted)
-            .ToListAsync();
-        return entities.Select(MapToModel).ToList();
-    }
-
     private static Todo.Backend.Models.Todo MapToModel(TodoEntity entity)
     {
         return Todo.Backend.Models.Todo.CreateInstance(
