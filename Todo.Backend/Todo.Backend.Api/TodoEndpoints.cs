@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Todo.Backend.Abstractions;
+using Todo.Backend.Api.Validation;
 
 namespace Todo.Backend.Api;
 
@@ -72,10 +73,12 @@ public static class TodoEndpoints
 // DTOs
 public record CreateTodoRequest(
     [Required(ErrorMessage = "Description is required.")]
-    [StringLength(80, MinimumLength = 1, ErrorMessage = "Description must be between 1 and 80 characters.")]
+    [NotWhitespace]
+    [StringLength(80, ErrorMessage = "Description cannot exceed 80 characters.")]
     string Description);
 
 public record UpdateTodoRequest(
-    [StringLength(80, MinimumLength = 1, ErrorMessage = "Description must be between 1 and 80 characters.")]
+    [NotWhitespace]
+    [StringLength(80, ErrorMessage = "Description cannot exceed 80 characters.")]
     string? Description,
     bool? IsCompleted);

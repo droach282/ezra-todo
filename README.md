@@ -80,7 +80,7 @@ The application will be available at `http://localhost:3000`
 
 **Developer Experience:**
 - Type-safe API integration with TypeScript and Zod
-- Comprehensive unit testing (79 total tests)
+- Comprehensive unit testing (105 total tests)
 - OpenAPI/Swagger documentation (development mode)
 - CORS support for frontend integration
 - Hot module replacement in development
@@ -95,7 +95,9 @@ ezra-todo/
 │   ├── Todo.Backend.Data/             # Data access with EF Core
 │   ├── Todo.Backend.Models/           # Domain models
 │   ├── Todo.Backend.Abstractions/     # Interfaces
-│   └── Todo.Backend.Models.Tests/     # xUnit tests
+│   ├── Todo.Backend.Models.Tests/     # xUnit tests (domain)
+│   ├── Todo.Backend.Services.Tests/   # xUnit tests (service)
+│   └── Todo.Backend.Api.Tests/        # xUnit tests (API validation)
 │
 └── todo-frontend/                      # React Frontend
     ├── src/
@@ -270,23 +272,46 @@ The application includes comprehensive unit tests for both backend and frontend 
 
 ### Backend Tests
 
-**Framework**: xUnit
+**Framework**: xUnit with Moq
 
-**Coverage**: 8 tests for domain model validation
+**Coverage**: 34 tests across domain, service, and API layers
 
-**Location**: `Todo.Backend/Todo.Backend.Models.Tests/`
+**Locations**:
+- `Todo.Backend/Todo.Backend.Models.Tests/` (8 tests)
+- `Todo.Backend/Todo.Backend.Services.Tests/` (18 tests)
+- `Todo.Backend/Todo.Backend.Api.Tests/` (8 tests)
 
 **Running Tests**:
 ```bash
+# Run all backend tests
+cd Todo.Backend
+dotnet test
+
+# Or run individual test projects
 cd Todo.Backend/Todo.Backend.Models.Tests
 dotnet test
 ```
 
-**Test Focus**:
+**Test Coverage**:
+
+**Domain Model Tests** (8 tests):
 - Domain model validation (description length, empty values)
 - State transition methods (Complete, ResetCompletion, UpdateDescription)
 - Idempotent behavior verification
 - Timestamp updates on modifications
+
+**Service Layer Tests** (18 tests):
+- CreateTodoAsync: Repository interaction, ID assignment, timestamp handling, validation
+- GetTodoAsync: Repository delegation, data retrieval
+- GetAllTodosAsync: Batch retrieval, empty state handling
+- UpdateTodoAsync: Partial updates, completion toggling, timestamp updates, validation
+- DeleteTodoAsync: Repository delegation, completion verification
+
+**API Validation Tests** (8 tests):
+- NotWhitespaceAttribute: Custom validation attribute testing
+- Valid strings, empty strings, whitespace-only strings, null handling
+- Edge cases: tabs, newlines, mixed whitespace, leading/trailing whitespace
+- Non-string value handling
 
 ### Frontend Tests
 
