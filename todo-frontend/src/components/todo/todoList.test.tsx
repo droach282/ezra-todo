@@ -334,6 +334,9 @@ describe('TodoList Component', () => {
 
       // AddTodo should still be visible
       expect(screen.getByTestId('add-todo')).toBeInTheDocument()
+
+      // Empty message should now be visible
+      expect(screen.queryByText('You have no todos.')).toBeInTheDocument()
     })
   })
 
@@ -394,6 +397,26 @@ describe('TodoList Component', () => {
       expect(todoItems[1]).toHaveAttribute('data-testid', 'todo-item-2')
       expect(todoItems[2]).toHaveAttribute('data-testid', 'todo-item-3')
       expect(todoItems[3]).toHaveAttribute('data-testid', 'todo-item-4')
+    })
+
+    it('should display a message when there are no todo items', async () => {
+      mockGetTodos.mockResolvedValue([])
+
+      renderWithQueryClient(<TodoList />)
+
+      await waitFor(() => {
+        expect(screen.queryByText('You have no todos.')).toBeInTheDocument();
+      })
+    })
+
+    it('should not display a message when there are todo items', async () => {
+      mockGetTodos.mockResolvedValue(mockTodos)
+
+      renderWithQueryClient(<TodoList />)
+
+      await waitFor(() => {
+        expect(screen.queryByText('You have no todos.')).not.toBeInTheDocument();
+      })
     })
   })
 })

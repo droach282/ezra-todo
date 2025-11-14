@@ -40,9 +40,14 @@ export default function TodoList() {
           {showIncompleteOnly ? 'Show All' : 'Show Incomplete'}
         </button>
       </div>
-      {filteredData.map((item) => (
-        <TodoItem key={item.id} todo={item} />
-      ))}
+      {filteredData.length > 0 ? (
+        filteredData.map((item) => (
+            <TodoItem key={item.id} todo={item} />
+          ))
+      ): (
+        <div className="w-4xl text-2xl p-6 flex justify-center">You have no todos.</div>
+      )}
+
     </div>
   )
 }
