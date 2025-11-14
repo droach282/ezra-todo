@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { PlusIcon } from 'lucide-react'
 import { useCreateTodo } from '@/hooks/useTodoMutations'
 
-export default function AddTodo() {
+export default function AddTodo({className}: {className?: string}) {
   const [description, setDescription] = useState('')
   const { mutation, error } = useCreateTodo()
 
@@ -18,7 +18,7 @@ export default function AddTodo() {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={`flex flex-col gap-2 ${className}`}>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="text"

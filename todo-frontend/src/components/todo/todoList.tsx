@@ -27,7 +27,8 @@ export default function TodoList() {
 
   return (
     <div className="max-w-fit flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-end gap-4">
+        <AddTodo className="flex-1" />
         <button
           onClick={() => setShowIncompleteOnly(!showIncompleteOnly)}
           className={`px-4 py-2 rounded border-2 transition-colors ${
@@ -42,7 +43,6 @@ export default function TodoList() {
       {filteredData.map((item) => (
         <TodoItem key={item.id} todo={item} />
       ))}
-      <AddTodo />
     </div>
   )
 }
